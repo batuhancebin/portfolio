@@ -1,22 +1,59 @@
 <template>
     <div>
-        <div class="container">
-            <section class="flex justify-center">
-                <div>
-                    <h1>
-                        <span>Oktay</span>
-                        <span>Kaypak</span>
-                        <span>UI & UX Developer</span>
-                    </h1>
-                </div>
-            </section>
-            <section> </section>
-        </div>
+        <section class="flex justify-center">
+            <div class="container">
+                <h1 class="split">Oktay</h1>
+                <h1 class="split2">Kaypak</h1>
+                <h1 class="split work">UI & UX Developer</h1>
+            </div>
+        </section>
+        <section style="height: 2000px;">
+
+        </section>
     </div>
 </template>
 
 <script setup>
-// gsap animation
+import { gsap } from 'gsap';
+import { Observer } from 'gsap/Observer';
+import { Draggable } from 'gsap/Draggable';
+
+gsap.registerPlugin(Observer);
+
+onMounted(() => {
+    function rotate(value) {
+        gsap.to('.split', {
+            rotate: value + '_short',
+            ease: 'back.out',
+            duration: 0.5,
+            overwrite: true,
+            transformOrigin: 'center center',
+        }),
+            gsap.to('.split2', {
+                rotate: -value + '_short',
+                ease: 'back.out',
+                duration: 0.5,
+                overwrite: true,
+                transformOrigin: 'center center',
+            })
+    }
+    Observer.create({
+        target: window,
+        types: "wheel.touch.scroll.pointer",
+        onUp: () => { rotate('0') },
+        onDown: () => { rotate('180') },
+        onChange: (self) => {
+            if (self.direction === 1) {
+                rotate('180')
+            } else {
+                rotate('0')
+            }
+        }
+    })
+
+})
+
+
 </script>
 
 <style scoped lang="scss">
@@ -26,7 +63,7 @@
 }
 
 
-.container h1 {
+.container {
     font-size: 5rem;
     line-height: 1;
     font-weight: 800;
@@ -35,15 +72,11 @@
     top: 15vw;
     left: 10vw;
     z-index: 4;
-    overflow-wrap: break-word;
-    hyphens: auto;
 
     @media (max-width: 768px) {
         font-size: 16vw;
     }
 
-    span {
-        display: block;
-    }
+
 }
 </style>
